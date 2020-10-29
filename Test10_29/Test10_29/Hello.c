@@ -1,0 +1,1 @@
+static int Hello = 100;

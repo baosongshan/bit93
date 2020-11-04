@@ -25,18 +25,27 @@ int Mod(int a, int b)
 	return a % b;
 }
 
-
 void main()
 {
 	int select = 1;
 	int op1, op2, result;
+
+	////////////////////////////////////////////////
+	//界面设计
+	system("title 简易计算器");
+	system("mode con cols=30 lines=15");
+	system("color 0F");
+	////////////////////////////////////////////////
+
 	while(select)
 	{
-		printf("*********************************\n");
-		printf("* [1] Add           [2] Sub     *\n");
-		printf("* [3] Mul           [4] Div     *\n");
-		printf("* [5] Mod           [0] Quit    *\n");
-		printf("*********************************\n");
+		printf("******************************\n");
+		printf("*        简 易 计 算 器      *\n");
+		printf("******************************\n");
+		printf("* [1] Add           [2] Sub  *\n");
+		printf("* [3] Mul           [4] Div  *\n");
+		printf("* [5] Mod           [0] Quit *\n");
+		printf("******************************\n");
 		printf("请选择:>");
 		scanf("%d", &select);
 		if(select == 0)
@@ -67,6 +76,8 @@ void main()
 			break;
 		}
 		printf("result = %d\n", result);
+		system("pause");
+		system("cls"); 
 	}
 	printf("系统退出.\n");
 }

@@ -1,6 +1,169 @@
+//定义或实现
+/*
+int MyMax(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+/*
+#define _CRT_SECURE_NO_WARNINGS
+
 #include<stdio.h>
 #include<windows.h>
+#include<stdbool.h>
 
+void fun1();
+void fun2();
+
+void fun1()
+{
+	fun2();
+	printf("Hello C.\n");
+}
+void fun2()
+{
+	printf("Hello Cpp.\n");
+}
+
+void main()
+{
+	fun1();
+}
+
+/*
+int main()
+{
+	char arr[20] = "hello";
+	int ret = strlen(strcat(arr, "bit"));//这里介绍一下strlen函数
+	printf("%d\n", ret);
+	return 0;
+}
+
+/*
+int main()
+{
+	char arr[20] = "hello";
+	printf("arr = %s\n", arr);
+	strcat(arr, "bit");
+	printf("arr = %s\n", arr);  //hellobit
+	
+	int ret = strlen(arr);
+	printf("%d\n", ret);
+
+	return 0;
+}
+
+/*
+void fun1()
+{
+	printf("Hello C.\n");
+}
+void fun2()
+{
+	fun1();
+	printf("Hello Cpp.\n");
+}
+void fun3()
+{
+	fun2();
+	printf("Hello Linux.\n");
+}
+
+void main()
+{
+	fun3();
+
+}
+
+/*
+//写一个函数，每调用一次这个函数，就会将num的值增加1
+void fun(int *pnum)
+{
+	(*pnum)++;
+}
+
+int main()
+{
+	int num = 0;
+	printf("num = %d\n", num);
+	fun(&num);
+	printf("num = %d\n", num);
+
+	return 0;
+}
+
+
+
+/*
+//写一个函数判断一年是不是闰年
+bool IsLeap(int year)
+{
+	return ((year%4==0)&&(year%100!=0)) || (year%400==0);
+}
+void main()
+{
+	int year;
+	printf("input year:>");
+	scanf("%d", &year);
+	if(IsLeap(year))
+		printf("Is Leap.\n");
+	else
+		printf("Is not Leap.\n");
+}
+
+/*
+//写一个函数可以判断一个数是不是素数
+int IsPrime(int value)
+{
+	for(int i=2; i<value-1; ++i)
+	{
+		if(value % i == 0)
+			return -1;
+	}
+	return 0;
+}
+void main()
+{
+	int n;
+	printf("input n:>");
+	scanf("%d", &n);
+	if(IsPrime(n) == 0)
+		printf("Is Prime.\n");
+	else
+		printf("Is not Prime.\n");
+}
+
+
+/*
+bool IsPrime(int value)
+{
+	for(int i=2; i<value-1; ++i)
+	{
+		if(value % i == 0)
+			return false;
+	}
+	return true;
+}
+void main()
+{
+	int n;
+	printf("input n:>");
+	scanf("%d", &n);
+	if(IsPrime(n))
+		printf("Is Prime.\n");
+	else
+		printf("Is not Prime.\n");
+}
+
+/*
+void PrintArray(int ar[], int n)
+{
+	for(int i=0; i<n; ++i)
+	{
+		printf("%d ", ar[i]);
+	}
+	printf("\n");
+}
 //
 int Find(int ar[], int n, int key)
 {
@@ -54,13 +217,45 @@ int FindSecond(int ar[], int n)
 
 void Sort(int ar[], int n)
 {
-	//????
+	for(int i=0; i<n-1; ++i) //用于控制比较的趟数
+	{
+		for(int j=0; j<n-i-1; ++j) //用于控制每一趟的排序
+		{
+			if(ar[j] > ar[j+1])
+			{
+				//交换两个数
+				int tmp = ar[j];
+				ar[j] = ar[j+1];
+				ar[j+1] = tmp;
+			}
+		}
+	}
 }
 void Reverse(int ar[], int n)
 {
-	//????
+	int low = 0;
+	int high = n-1;
+	while(low < high)
+	{
+		int tmp = ar[low];
+		ar[low] = ar[high];
+		ar[high] = tmp;
+
+		low++;
+		high--;
+	}
+}
+void main()
+{
+	int ar[] = {4,700,9,200,1,55,120,43,21,67,54,100};
+	int n = sizeof(ar) / sizeof(ar[0]);
+	PrintArray(ar, n);
+	Reverse(ar, n);
+	//Sort(ar, n);
+	PrintArray(ar, n);
 }
 
+/*
 void main()
 {
 	int ar[] = {4,7,9,200,1,5,120,43,21,67,54,100};

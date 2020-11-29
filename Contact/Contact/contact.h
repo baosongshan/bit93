@@ -44,5 +44,6 @@ typedef struct Contact_t
 //º¯ÊýµÄÉêÃ÷
 void ContactInit(Contact_t *pct);
 void ContactAdd(Contact_t *pct);
+void ContactShow(Contact_t *pct);
 
 #endif /* _CONTACT_H_ */

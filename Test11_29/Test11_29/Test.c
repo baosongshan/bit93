@@ -1,7 +1,535 @@
 #include<stdio.h>
 #include<vld.h>
 #include<limits.h>
+#include<errno.h>
 
+
+void main()
+{
+	int ar[] = {12,23,34,45,56,67,78,89, 90, 100};
+	int n = sizeof(ar) / sizeof(ar[0]);
+
+	FILE *fp = fopen("Test5.txt", "w");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	for(int i=0; i<n; ++i)
+	{
+		fprintf(fp, "%d ", ar[i]);
+	}
+
+	fclose(fp);  //
+
+}
+
+/*
+enum { SIZE = 5 };
+int main(void)
+{
+	double a[SIZE] = { 1., 2., 3., 4., 5. };
+	FILE *fp = fopen("test.bin", "wb"); // 必须用二进制模式
+	fwrite(a, sizeof *a, SIZE, fp); // 写 double 的数组
+	fclose(fp);
+
+
+	double b[SIZE];
+	fp = fopen("test.bin", "rb");
+
+	//100  200
+	size_t ret_code = fread(b, sizeof(double), SIZE*10, fp); // 读 double 的数组
+	
+	if (ret_code == SIZE*10) 
+	{
+		puts("Array read successfully, contents: ");
+		for (int n = 0; n < SIZE; ++n) 
+			printf("%f ", b[n]);
+		putchar('\n');
+	}
+	else 
+	{ // error handling
+		if (feof(fp))
+			printf("Error reading test.bin: unexpected end of file\n");
+		else if (ferror(fp)) 
+		{
+			perror("Error reading test.bin");
+		}
+	}
+	fclose(fp);
+}
+
+/*
+int main(void)
+{
+	int c; // 注意：int，非char，要求处理EOF
+	FILE* fp = fopen("Test3.txt", "r");
+	if (!fp) 
+	{
+		perror("File opening failed");
+		return -1;
+	}
+	//fgetc 当读取失败的时候或者遇到文件结束的时候，都会返回EOF
+	while ((c = fgetc(fp)) != EOF) // 标准C I/O读取文件循环
+	{
+		putchar(c);
+	}
+
+	//判断是什么原因结束的
+	if (ferror(fp))
+		puts("I/O error when reading");
+	else if (feof(fp))
+		puts("End of file reached successfully");
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	FILE *fp = fopen("Test1.txt", "r");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+	
+	int value;
+	int pos;
+	while(1)
+	{
+		printf("input pos:>");
+		scanf("%d", &pos);
+		fseek(fp, (pos-1)*3,SEEK_SET );
+		fscanf(fp, "%d", &value);
+		printf("%d pos value = %d\n", pos, value);
+	}
+
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	int ar[10];
+	FILE *fp = fopen("Test1.txt", "r");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	long offset = ftell(fp);
+	fscanf(fp, "%d", &ar[0]);
+	fscanf(fp, "%d", &ar[1]);
+	fscanf(fp, "%d", &ar[2]);
+	fscanf(fp, "%d", &ar[3]);
+	offset = ftell(fp);
+
+	rewind(fp);
+
+	offset = ftell(fp);
+
+	fclose(fp);
+}
+
+/*
+//Copy.exe src dest
+//   0      1   2
+
+void main(int argc, char *argv[])
+{
+	FILE *fpIn = fopen(argv[1], "rb");
+	if(NULL == fpIn)
+	{
+		printf("Open Src File Error.\n");
+		return;
+	}
+	FILE *fpOut = fopen(argv[2], "wb");
+	if(NULL == fpOut)
+	{
+		printf("Open Dest File Error.\n");
+		return;
+	}
+
+	char buffer[256] = {0};
+	while(!feof(fpIn))   //
+	{
+		size_t sz = fread(buffer, sizeof(char), 256, fpIn);
+		if(sz == 0)
+			break;
+		fwrite(buffer, sizeof(char), sz, fpOut);
+	}
+
+	fclose(fpIn);
+	fclose(fpOut);
+}
+
+/*
+void main(int argc, char *argv[])
+{
+	FILE *fpIn = fopen(argv[1], "r");
+	if(NULL == fpIn)
+	{
+		printf("Open Src File Error.\n");
+		return;
+	}
+	FILE *fpOut = fopen(argv[2], "w");
+	if(NULL == fpOut)
+	{
+		printf("Open Dest File Error.\n");
+		return;
+	}
+	while(!feof(fpIn))   //
+	{
+		char ch = fgetc(fpIn);
+		fputc(ch, fpOut);
+	}
+
+	fclose(fpIn);
+	fclose(fpOut);
+}
+
+/*
+void main()
+{
+	FILE *fpIn = fopen("Test.c", "r");
+	if(NULL == fpIn)
+	{
+		printf("Open Input File Error.\n");
+		return;
+	}
+	FILE *fpOut = fopen("myTest1.c", "w");
+	if(NULL == fpOut)
+	{
+		printf("Open Output File Error.\n");
+		return;
+	}
+	char buffer[256] = {0};
+
+	while(!feof(fpIn))   //
+	{
+		char *res = fgets(buffer, 256, fpIn);  //44
+		if(res == NULL)
+			break;
+		fputs(buffer, fpOut);
+	}
+
+	fclose(fpIn);
+	fclose(fpOut);
+}
+
+/*
+void main()
+{
+	FILE *fpIn = fopen("Test.c", "r");
+	if(NULL == fpIn)
+	{
+		printf("Open Input File Error.\n");
+		return;
+	}
+	FILE *fpOut = fopen("myTest1.c", "w");
+	if(NULL == fpOut)
+	{
+		printf("Open Output File Error.\n");
+		return;
+	}
+	while(!feof(fpIn))   //
+	{
+		char ch = fgetc(fpIn);
+		fputc(ch, fpOut);
+	}
+
+	fclose(fpIn);
+	fclose(fpOut);
+}
+
+/*
+void main()
+{
+	FILE *fpIn = fopen("Test.c", "r");
+	if(NULL == fpIn)
+	{
+		printf("Open Input File Error.\n");
+		return;
+	}
+	FILE *fpOut = fopen("myTest.c", "w");
+	if(NULL == fpOut)
+	{
+		printf("Open Output File Error.\n");
+		return;
+	}
+
+	//拷贝过程
+	char ch = fgetc(fpIn);
+	while(ch != EOF)
+	{
+		fputc(ch, fpOut);
+		ch = fgetc(fpIn);
+	}
+	fputc(ch, fpOut);
+
+	fclose(fpIn);
+	fclose(fpOut);
+}
+
+/*
+void main()
+{
+	int ar[10];
+
+	FILE *fp = fopen("Test2.txt", "rb");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	fread(ar, sizeof(int), 10, fp);
+
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	int ar[] = {12,23,34,45,56,67,78,89, 90, 100};
+	//int ar[] = {1000, 2000, 3000};
+	int n = sizeof(ar) / sizeof(ar[0]);
+
+	FILE *fp = fopen("Test2.txt", "wb");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	fwrite(ar, sizeof(int), n, fp);
+
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	//int ar[] = {12,23,34,45,56,67,78,89, 90, 100};
+	int ar[] = {1000, 2000, 3000};
+	int n = sizeof(ar) / sizeof(ar[0]);
+
+	FILE *fp = fopen("Test1.txt", "a");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	for(int i=0; i<n; ++i)
+	{
+		fprintf(fp, "%d ", ar[i]);
+	}
+
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	int ar[10];
+	FILE *fp = fopen("Test1.txt", "r");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	for(int i=0; i<10; ++i)
+	{
+		//scanf("%d", &ar[i]);
+		fscanf(fp, "%d", &ar[i]);
+	}
+
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	int ar[] = {12,23,34,45,56,67,78,89, 90, 100};
+	int n = sizeof(ar) / sizeof(ar[0]);
+
+	FILE *fp = fopen("Test1.txt", "w");
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		return;
+	}
+
+	for(int i=0; i<n; ++i)
+	{
+		fprintf(fp, "%d ", ar[i]);
+	}
+
+	fclose(fp);
+}
+
+/*
+void main()
+{
+	FILE *fp = NULL; //1
+	fp = fopen("Test1.txt", "w");  //2
+	//fp = fopen("C:\\Bit\\xa.txt", "w");  //2
+	//fp = fopen("..\\xa.txt", "w");  //2
+	if(NULL == fp)
+	{
+		printf("Open File Error.\n");
+		printf("%s\n", strerror(errno));
+		return;
+	}
+
+	fclose(fp);   //3
+}
+
+/*
+//void *_alloca( size_t size );
+
+void main()
+{
+	int *ptr = _alloca(sizeof(int) * 10);  //不能释放的
+
+	//free(ptr);
+}
+
+/*
+#define ROW 5
+#define COL 5
+
+void main()
+{
+	//int ar[ROW][COL] = {0};  ar[i][j]
+	int **ar = (int **)malloc(sizeof(int*) * ROW);
+	if(NULL == ar)
+		return;
+
+	for(int i=0; i<ROW; ++i)
+	{
+		ar[i] = (int*)malloc(sizeof(int) * COL);
+	}
+
+	for(int i=0; i<ROW; ++i)
+	{
+		for(int j=0; j<COL; ++j)
+		{
+			ar[i][j] = i+j;
+		}
+	}
+
+	for(int i=0; i<ROW; ++i)
+	{
+		for(int j=0; j<COL; ++j)
+		{
+			printf("%d ", ar[i][j]);
+		}
+		printf("\n");
+	}
+
+	for(int i=0; i<ROW; ++i)
+		free(ar[i]);
+	free(ar);
+}
+
+/*
+typedef struct Test
+{
+	char a;
+	double b;
+	int c;
+	char ptr[0]; //柔性数组成员   不占空间
+}Test;
+
+void main()
+{
+	char str[] = "hello Bit";
+	Test *pt = (Test*)malloc(sizeof(Test) + strlen(str) + 1);
+	if(NULL == pt)
+	{
+		printf("Out Of Memory.\n");
+		return;
+	}
+
+	strcpy(pt->ptr,str);
+
+	printf("str = %s\n", pt->ptr);
+
+	free(pt);
+}
+
+/*
+typedef struct Test
+{
+	char a;
+	double b;
+	int c;
+	char *ptr; //柔性数组成员   不占空间
+}Test;
+
+void main()
+{
+	char str[] = "hello Bit";
+	Test *pt = (Test*)malloc(sizeof(Test));
+	if(NULL == pt)
+	{
+		printf("Out Of Memory.\n");
+		return;
+	}
+
+	pt->ptr = (char *)malloc(strlen(str) + 1);
+	strcpy(pt->ptr,str);
+
+	printf("str = %s\n", pt->ptr);
+
+	free(pt->ptr);
+	free(pt);
+}
+
+/*
+typedef struct Test
+{
+	char a;
+	double b;
+	int c;
+	char ptr[0]; //柔性数组成员   不占空间
+}Test;
+
+void main()
+{
+	char str[] = "hello Bit";
+	Test *pt = (Test*)malloc(sizeof(Test) + strlen(str) + 1);
+	if(NULL == pt)
+	{
+		printf("Out Of Memory.\n");
+		return;
+	}
+
+	strcpy(pt->ptr,str);
+
+	printf("str = %s\n", pt->ptr);
+
+	free(pt);
+}
+
+/*
+typedef struct Test
+{
+	int ar[0];
+}Test;
+
+void main()
+{
+	printf("size = %d\n", sizeof(Test));
+	Test t;
+}
+
+/*
 typedef struct Test
 {
 	char a;

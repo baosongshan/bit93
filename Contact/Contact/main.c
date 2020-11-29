@@ -24,12 +24,14 @@ int main(int argc, char *argv[])
 		switch(select)
 		{
 		case ADD:
+			ContactAdd(&cont);
 			break;
 		case DEL:
 			break;
 		case FIND:
 			break;
 		case SHOW:
+			ContactShow(&cont);
 			break;
 		case MOD:
 			break;

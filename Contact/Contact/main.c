@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 		case DEL:
 			break;
 		case FIND:
+			ContactFind(&cont);
 			break;
 		case SHOW:
 			ContactShow(&cont);
@@ -46,6 +47,8 @@ int main(int argc, char *argv[])
 
 		}
 	}
+
+	ContactSave(&cont);
 
 	return 0;
 }
